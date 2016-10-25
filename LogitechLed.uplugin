@@ -9,9 +9,9 @@
 	"DocsURL" : "https://github.com/ue4plugins/LogiLed",
 	"EngineVersion" : "4.14.0",
 	"Description" : ".",
-	"Category" : "Media Players",
+	"Category" : "Input Devices",
 	"CanContainContent" : false,
-	"EnabledByDefault" : false,
+	"EnabledByDefault" : true,
 	"IsBetaVersion": true,
 
 	"Modules" :

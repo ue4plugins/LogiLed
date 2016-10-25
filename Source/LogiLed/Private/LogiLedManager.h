@@ -5,6 +5,9 @@
 #include "Tickable.h"
 
 
+class UCurveLinearColor;
+
+
 /**
  * Manages Logitech LED state and timing.
  */

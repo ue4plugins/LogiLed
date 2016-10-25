@@ -7,6 +7,11 @@
 #include "LogiLedBlueprintLibrary.generated.h"
 
 
+class UCurveLinearColor;
+class UTexture;
+
+
+
 /**
  * Enumerates available Logitech LED device types.
  */
