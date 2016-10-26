@@ -9,6 +9,10 @@
 
 #include "Runtime/Core/Public/Core.h"
 #include "Runtime/CoreUObject/Public/CoreUObject.h"
+// start missing CurveLinearColor.h dependencies
+#include "Runtime/Engine/Public/Engine.h"
+#include "Runtime/Engine/Classes/Curves/CurveBase.h"
+// end dependencies
 #include "Runtime/Engine/Classes/Curves/CurveLinearColor.h"
 #include "Runtime/Engine/Classes/Engine/Texture.h"
 
