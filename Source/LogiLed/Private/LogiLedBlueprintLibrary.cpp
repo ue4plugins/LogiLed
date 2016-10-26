@@ -25,6 +25,18 @@ const uint32 LogiLedKeyName[] = {
 /* ULogiLedBlueprintLibrary interface (generic functions)
  *****************************************************************************/
 
+bool ULogiLedBlueprintLibrary::LogiLedInitialize()
+{
+	if (!::LogiLedInit())
+	{
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to initialize Logitech LED SDK"));
+		return false;
+	}
+
+	return true;
+}
+
+
 FString ULogiLedBlueprintLibrary::LogiLedKeyToString(ELogiLedKeys Key)
 {
 	static const UEnum* Enum = FindObject<UEnum>(ANY_PACKAGE, TEXT("ELogiLedKeys"));
@@ -36,13 +48,29 @@ FString ULogiLedBlueprintLibrary::LogiLedKeyToString(ELogiLedKeys Key)
 
 bool ULogiLedBlueprintLibrary::LogiLedSetTargetDevice(ELogiLedDeviceType DeviceType)
 {
-	if (!::LogiLedSetTargetDevice((int32)DeviceType))
+	int32 TargetDevice = 0;
+
+	switch (DeviceType)
+	{
+	case ELogiLedDeviceType::All: TargetDevice = LOGI_DEVICETYPE_ALL; break;
+	case ELogiLedDeviceType::Monochrome: TargetDevice = LOGI_DEVICETYPE_MONOCHROME; break;
+	case ELogiLedDeviceType::PerKeyRgb: TargetDevice = LOGI_DEVICETYPE_PERKEY_RGB; break;
+	case ELogiLedDeviceType::Rgb: TargetDevice = LOGI_DEVICETYPE_RGB; break;
+	}
+
+	if (!::LogiLedSetTargetDevice(TargetDevice))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to set target device"));
 		return false;
 	}
 
 	return true;
+}
+
+
+void ULogiLedBlueprintLibrary::LogiLedShutdown()
+{
+	::LogiLedShutdown();
 }
 
 
@@ -113,9 +141,9 @@ float ULogiLedBlueprintLibrary::LogiLedGetConfigOptionNumber(const FString& Conf
 
 void ULogiLedBlueprintLibrary::LogiLedFlashLighting(FLinearColor Color, FTimespan Duration, FTimespan Interval)
 {
-	const FColor RgbColor = Color.ToFColor(false);
+	const FLinearColor Percentage = Color.GetClamped() * 100.0f;
 
-	if (!::LogiLedFlashLighting(RgbColor.R, RgbColor.G, RgbColor.B, (int)Duration.GetTotalMilliseconds(), (int)Interval.GetTotalMilliseconds()))
+	if (!::LogiLedFlashLighting(Percentage.R, Percentage.G, Percentage.B, (int)Duration.GetTotalMilliseconds(), (int)Interval.GetTotalMilliseconds()))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to flash lighting with color %s for duration %s with interval %s"), *Color.ToString(), *Duration.ToString(), *Interval.ToString());
 	}
@@ -124,9 +152,9 @@ void ULogiLedBlueprintLibrary::LogiLedFlashLighting(FLinearColor Color, FTimespa
 
 void ULogiLedBlueprintLibrary::LogiLedPulseLighting(FLinearColor Color, FTimespan Duration, FTimespan Interval)
 {
-	const FColor RgbColor = Color.ToFColor(false);
+	const FLinearColor Percentage = Color.GetClamped() * 100.0f;
 
-	if (!::LogiLedPulseLighting(RgbColor.R, RgbColor.G, RgbColor.B, (int)Duration.GetTotalMilliseconds(), (int)Interval.GetTotalMilliseconds()))
+	if (!::LogiLedPulseLighting(Percentage.R, Percentage.G, Percentage.B, (int)Duration.GetTotalMilliseconds(), (int)Interval.GetTotalMilliseconds()))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to pulse lighting with color %s for duration %s with interval %s"), *Color.ToString(), *Duration.ToString(), *Interval.ToString());
 	}
@@ -151,12 +179,11 @@ void ULogiLedBlueprintLibrary::LogiLedSaveLighting()
 }
 
 
-
 void ULogiLedBlueprintLibrary::LogiLedSetLighting(FLinearColor Color)
 {
-	FColor RgbColor = Color.ToFColor(false);
+	const FLinearColor Percentage = Color.GetClamped() * 100.0f;
 
-	if (!::LogiLedSetLighting(RgbColor.R, RgbColor.G, RgbColor.B))
+	if (!::LogiLedSetLighting(Percentage.R, Percentage.G, Percentage.B))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to set lighting to %s"), *Color.ToString());
 	}
@@ -199,34 +226,34 @@ void ULogiLedBlueprintLibrary::LogiLedExcludeKeysFromTexture(TArray<ELogiLedKeys
 
 void ULogiLedBlueprintLibrary::LogiLedFlashLightingForKey(ELogiLedKeys Key, FLinearColor Color, FTimespan Duration, FTimespan Interval)
 {
-	const FColor RgbColor = Color.ToFColor(false);
+	const FLinearColor Percentage = Color.GetClamped() * 100.0f;
 
 	if (!::LogiLedFlashSingleKey(
 		(LogiLed::KeyName)LogiLedKeyName[(int)Key],
-		RgbColor.R, RgbColor.G, RgbColor.B,
+		Percentage.R, Percentage.G, Percentage.B,
 		(int)Duration.GetTotalMilliseconds(),
 		(int)Interval.GetTotalMilliseconds()
 	))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to flash lighting for key %i"), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to flash lighting for key %s"), *LogiLedKeyToString(Key));
 	}
 }
 
 
 void ULogiLedBlueprintLibrary::LogiLedPulseLightingForKey(ELogiLedKeys Key, FLinearColor StartColor, FLinearColor EndColor, FTimespan Duration, bool Infinite)
 {
-	const FColor RgbStartColor = StartColor.ToFColor(false);
-	const FColor RgbEndColor = EndColor.ToFColor(false);
+	const FLinearColor StartPercentage = StartColor.GetClamped() * 100.0f;
+	const FLinearColor EndPercentage = EndColor.GetClamped() * 100.0f;
 
 	if (!::LogiLedPulseSingleKey(
 		(LogiLed::KeyName)LogiLedKeyName[(int)Key],
-		RgbStartColor.R, RgbStartColor.G, RgbStartColor.B,
-		RgbEndColor.R, RgbEndColor.G, RgbEndColor.B,
+		StartPercentage.R, StartPercentage.G, StartPercentage.B,
+		EndPercentage.R, EndPercentage.G, EndPercentage.B,
 		(int)Duration.GetTotalMilliseconds(),
 		Infinite
 	))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to pulse lighting for key %i"), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to pulse lighting for key %s"), *LogiLedKeyToString(Key));
 	}
 }
 
@@ -235,7 +262,7 @@ void ULogiLedBlueprintLibrary::LogiLedRestoreLightingForKey(ELogiLedKeys Key)
 {
 	if (!::LogiLedRestoreLightingForKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to restore lighting for key %i"), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to restore lighting for key %s"), *LogiLedKeyToString(Key));
 	}
 }
 
@@ -244,7 +271,7 @@ void ULogiLedBlueprintLibrary::LogiLedSaveLightingForKey(ELogiLedKeys Key)
 {
 	if (!::LogiLedSaveLightingForKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to save lighting for key %i"), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to save lighting for key %s"), *LogiLedKeyToString(Key));
 	}
 }
 
@@ -257,11 +284,11 @@ void ULogiLedBlueprintLibrary::LogiLedSetLightingCurveForKey(ELogiLedKeys Key, U
 
 void ULogiLedBlueprintLibrary::LogiLedSetLightingForKey(ELogiLedKeys Key, FLinearColor Color)
 {
-	const FColor RgbColor = Color.ToFColor(false);
+	const FLinearColor Percentage = Color.GetClamped() * 100.0f;
 
-	if (!::LogiLedSetLightingForKeyWithKeyName((LogiLed::KeyName)LogiLedKeyName[(int)Key], RgbColor.R, RgbColor.G, RgbColor.B))
+	if (!::LogiLedSetLightingForKeyWithKeyName((LogiLed::KeyName)LogiLedKeyName[(int)Key], Percentage.R, Percentage.G, Percentage.B))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to set lighting to %s for key %i"), *Color.ToString(), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to set lighting to %s for key %s"), *Color.ToString(), *LogiLedKeyToString(Key));
 	}
 }
 
@@ -289,6 +316,6 @@ void ULogiLedBlueprintLibrary::LogiLedStopEffectForKey(ELogiLedKeys Key)
 {
 	if (!::LogiLedStopEffectsOnKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
 	{
-		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects for key %i"), *LogiLedKeyToString(Key));
+		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects for key %s"), *LogiLedKeyToString(Key));
 	}
 }

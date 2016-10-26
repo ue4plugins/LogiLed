@@ -15,12 +15,13 @@ class UTexture;
 /**
  * Enumerates available Logitech LED device types.
  */
-UENUM(meta=(Bitflags))
+UENUM()
 enum class ELogiLedDeviceType : uint8
 {
+	All,
 	Monochrome,
-	Rgb,
-	PerKeyRgb
+	PerKeyRgb,
+	Rgb
 };
 
 
@@ -160,6 +161,15 @@ class ULogiLedBlueprintLibrary
 public:
 
 	/**
+	 * Initialize the Logitech LED SDK.
+	 *
+	 * @return true on success, false otherwise.
+	 * @see LogiLedShutdown
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed")
+	static bool LogiLedInitialize();
+
+	/**
 	 * Get the string representation of the given key.
 	 *
 	 * @param Key The key.
@@ -176,6 +186,14 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed")
 	static bool LogiLedSetTargetDevice(ELogiLedDeviceType DeviceType);
+
+	/**
+	 * Shut down the Logitech LED SDK.
+	 *
+	 * @see LogiLedInitialize
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed")
+	static void LogiLedShutdown();
 
 public:
 

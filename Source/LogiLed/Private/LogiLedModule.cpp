@@ -29,7 +29,7 @@ public:
 	{
 #if LOGILED_SUPPORTED_PLATFORM
 		// initialize Logitech SDK
-		if (!LogiLedInit())
+		if (!::LogiLedInit())
 		{
 			UE_LOG(LogLogiLed, Error, TEXT("Failed to initialize Logitech LED SDK"));
 			return;
@@ -40,9 +40,13 @@ public:
 
 		int Major, Minor, Build;
 
-		if (LogiLedGetSdkVersion(&Major, &Minor, &Build))
+		if (::LogiLedGetSdkVersion(&Major, &Minor, &Build))
 		{
-			UE_LOG(LogLogiLed, Log, TEXT("Initialize Logitech LED SDK %i.%.%."), Major, Minor, Build);
+			UE_LOG(LogLogiLed, Log, TEXT("Initialized Logitech LED SDK %i.%i.%i."), Major, Minor, Build);
+		}
+		else
+		{
+			UE_LOG(LogLogiLed, Log, TEXT("Initialized Logitech LED SDK (unknown version)"));
 		}
 
 		Initialized = true;
@@ -57,7 +61,7 @@ public:
 
 #if LOGILED_SUPPORTED_PLATFORM
 		// shut down SDK
-		LogiLedShutdown();
+		::LogiLedShutdown();
 #endif
 
 		Initialized = false;

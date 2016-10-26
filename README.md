@@ -11,8 +11,8 @@ TODO
 
 ## Supported Platforms
 
-This plug-in was last built against **Unreal Engine 4.14** and tested on the
-following platforms:
+This plug-in was last built against **Unreal Engine 4.14** with *Logitech LED
+SDK 8.87* and tested on the following platforms:
 
 - Windows
 
