@@ -65,21 +65,21 @@ void FLogiLedManager::Tick(float DeltaTime)
 	// global animation
 	if (Animation.Curve != nullptr)
 	{
-		const FColor RgbColor = Animation.Curve->GetLinearColorValue(Animation.Time).ToFColor(false);
-		::LogiLedSetLighting(RgbColor.R, RgbColor.G, RgbColor.B);
+		const FLinearColor Percentage = Animation.Curve->GetLinearColorValue(Animation.Time).GetClamped() * 100.0f;
+		::LogiLedSetLighting(Percentage.R, Percentage.G, Percentage.B);
 
 		Animation.Time += DeltaTime;
 	}
 
 	// override individual keys
-	for (auto KeyAnimationsPair : KeyAnimations)
+	for (auto& KeyAnimationsPair : KeyAnimations)
 	{
 		FAnimation& KeyAnimation = KeyAnimationsPair.Value;
 
 		if (KeyAnimation.Curve != nullptr)
 		{
-			const FColor RgbColor = Animation.Curve->GetLinearColorValue(Animation.Time).ToFColor(false);
-			::LogiLedSetLightingForKeyWithKeyName(KeyAnimationsPair.Key, RgbColor.R, RgbColor.G, RgbColor.B);
+			const FLinearColor Percentage = KeyAnimation.Curve->GetLinearColorValue(KeyAnimation.Time).GetClamped() * 100.0f;
+			::LogiLedSetLightingForKeyWithKeyName(KeyAnimationsPair.Key, Percentage.R, Percentage.G, Percentage.B);
 
 			KeyAnimation.Time += DeltaTime;
 		}
