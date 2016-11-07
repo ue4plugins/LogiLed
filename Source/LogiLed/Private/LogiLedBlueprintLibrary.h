@@ -309,7 +309,7 @@ public:
 	static void LogiledSetLightingCurve(UCurveLinearColor* ColorCurve);
 
 	/**
-	 * Stop any active flashing or pulsing effect.
+	 * Stop any active flashing, pulsing, or curve effect.
 	 *
 	 * @return true on success, false otherwise.
 	 * @see LogiLedFlashLighting, LogiLedPulseLighting, LogiLedStopEffectsOnKey
@@ -411,7 +411,7 @@ public:
 	static void LogiLedSetLightingFromTexture(UTexture* Texture);
 
 	/**
-	 * Stop any active flashing or pulsing effect on the specified key.
+	 * Stop any active flashing, pulsing, or curve effect on the specified key.
 	 *
 	 * @param Key The key to stop the effect on.
 	 * @see LogiLedFlashSingleKey, LogiLedPulseSingleKey, LogiLedSetTargetDevice, LogiLedStopEffects

@@ -198,6 +198,8 @@ void ULogiLedBlueprintLibrary::LogiledSetLightingCurve(UCurveLinearColor* ColorC
 
 void ULogiLedBlueprintLibrary::LogiLedStopEffects()
 {
+	Manager.StopAnimations();
+
 	if (!::LogiLedStopEffects())
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects"));
@@ -314,7 +316,10 @@ void ULogiLedBlueprintLibrary::LogiLedSetLightingFromTexture(UTexture* Texture)
 
 void ULogiLedBlueprintLibrary::LogiLedStopEffectForKey(ELogiLedKeys Key)
 {
-	if (!::LogiLedStopEffectsOnKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
+	auto KeyName = (LogiLed::KeyName)LogiLedKeyName[(int)Key];
+	Manager.StopAnimations(KeyName);
+
+	if (!::LogiLedStopEffectsOnKey(KeyName))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects for key %s"), *LogiLedKeyToString(Key));
 	}
