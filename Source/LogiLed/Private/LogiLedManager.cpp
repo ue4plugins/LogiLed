@@ -9,6 +9,17 @@
 
 FLogiLedManager::FLogiLedManager()
 {
+#if WITH_EDITOR
+	FEditorDelegates::EndPIE.AddRaw(this, &FLogiLedManager::HandleEditorEndPIE);
+#endif
+}
+
+
+FLogiLedManager::~FLogiLedManager()
+{
+#if WITH_EDITOR
+	FEditorDelegates::EndPIE.RemoveAll(this);
+#endif
 }
 
 
@@ -85,3 +96,17 @@ void FLogiLedManager::Tick(float DeltaTime)
 		}
 	}
 }
+
+
+/* FLogiLedManager callbacks
+ *****************************************************************************/
+
+#if WITH_EDITOR
+
+void FLogiLedManager::HandleEditorEndPIE(bool bIsSimulating)
+{
+	StopAnimations();
+	::LogiLedStopEffects();
+}
+
+#endif

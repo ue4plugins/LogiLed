@@ -25,6 +25,11 @@ namespace UnrealBuildTool.Rules
 				}
 			);
 
+            if (UEBuildConfiguration.bBuildEditor)
+            {
+                PrivateDependencyModuleNames.Add("UnrealEd");
+            }
+
 			// add Logitech SDK libraries
 			string LogiDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "..", "..", "ThirdParty"));
 			string LibDir = Path.Combine(LogiDir, "lib");

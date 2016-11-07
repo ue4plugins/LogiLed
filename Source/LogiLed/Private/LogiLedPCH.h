@@ -16,5 +16,9 @@
 #include "Runtime/Engine/Classes/Curves/CurveLinearColor.h"
 #include "Runtime/Engine/Classes/Engine/Texture.h"
 
+#if WITH_EDITOR
+	#include "Editor/UnrealEd/Public/Editor.h"
+#endif
+
 
 DECLARE_LOG_CATEGORY_EXTERN(LogLogiLed, Log, All);

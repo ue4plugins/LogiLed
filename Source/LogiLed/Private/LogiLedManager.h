@@ -25,6 +25,9 @@ public:
 	/** Default constructor. */
 	FLogiLedManager();
 
+	/** Virtual destructor. */
+	~FLogiLedManager();
+
 public:
 
 	/**
@@ -66,6 +69,15 @@ public:
 	virtual TStatId GetStatId() const override;
 	virtual bool IsTickable() const override;
 	virtual void Tick(float DeltaTime) override;
+
+#if WITH_EDITOR
+
+private:
+
+	/** Callback for when PIE or SIE ends. */
+	void HandleEditorEndPIE(bool bIsSimulating);
+
+#endif
 
 private:
 
