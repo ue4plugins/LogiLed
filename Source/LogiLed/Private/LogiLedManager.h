@@ -27,12 +27,36 @@ public:
 
 public:
 
+	/**
+	 * Play a color curve animation on all keys.
+	 *
+	 * @param ColorCurve The color curve.
+	 * @see StopAnimations
+	 */
 	void PlayAnimation(UCurveLinearColor* ColorCurve);
 
+	/**
+	 * Play a color curve animation on the specified key.
+	 *
+	 * @param KeyName The key to play the animation on.
+	 * @param ColorCurve The color curve.
+	 * @see StopAnimations
+	 */
 	void PlayAnimation(LogiLed::KeyName KeyName, UCurveLinearColor* ColorCurve);
 
+	/**
+	 * Stop color curve animations on all keys.
+	 *
+	 * @see PlayAnimation
+	 */
 	void StopAnimations();
 
+	/**
+	 * Stop color curve animation on the specified key.
+	 *
+	 * @param KeyName The name of the key to stop the animation on.
+	 * @see PlayAnimation
+	 */
 	void StopAnimations(LogiLed::KeyName KeyName);
 
 public:
