@@ -248,7 +248,6 @@ public:
 	 * @param Color The flash color.
 	 * @param Duration Duration of the effect.
 	 * @param Interval Flashing interval.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedFlashSingleKey, LogiLedPulseLighting, LogiLedSetLighting, LogiLedSetTargetDevice, LogiLedStopEffects
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|General")
@@ -263,7 +262,6 @@ public:
 	 * @param Color The pulse color.
 	 * @param Duration Duration of the effect.
 	 * @param Interval Flashing interval.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedFlashLighting, LogiLedPulseSingleKey, LogiLedSetLighting, LogiLedSetTargetDevice, LogiLedStopEffects
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|General")
@@ -323,24 +321,34 @@ public:
 	 * Set a collection of keys to ignore when setting lighting from a bitmap.
 	 *
 	 * @param Keys The keys to exclude.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedSetLightingFromTexture
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedExcludeKeysFromTexture(TArray<ELogiLedKeys> Keys);
 
 	/**
-	 * Play a flashing effect on the targeted devices.
+	 * Play a flashing effect on the specified key.
 	 *
 	 * @param Key The key to flash.
 	 * @param Color The flash color.
 	 * @param Duration Duration of the effect.
 	 * @param Interval Flashing interval.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedFlashLighting. LogiLedPulseSingleKey, LogiLedSetTargetDevice, LogiLedStopEffects, LogiLedStopEffectsOnKey
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedFlashLightingForKey(ELogiLedKeys Key, FLinearColor Color, FTimespan Duration, FTimespan Interval);
+
+	/**
+	 * Play a flashing effect on the specified keys.
+	 *
+	 * @param Keys The keys to flash.
+	 * @param Color The flash color.
+	 * @param Duration Duration of the effect.
+	 * @param Interval Flashing interval.
+	 * @see LogiLedFlashLighting. LogiLedPulseSingleKey, LogiLedSetTargetDevice, LogiLedStopEffects, LogiLedStopEffectsOnKey
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedFlashLightingForKeys(const TArray<ELogiLedKeys> Keys, FLinearColor Color, FTimespan Duration, FTimespan Interval);
 
 	/**
 	 * Play a pulsing effect on the specified key.
@@ -350,52 +358,97 @@ public:
 	 * @param EndColor The pulse color to finish with.
 	 * @param Duration Duration of the effect.
 	 * @param Infinite Whether to loop the effect until LogiLedStopEffectsOnKey or LogiLedStopEffects is called.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedFlashSingleKey, LogiLedPulseLighting, LogiLedSetTargetDevice, LogiLedStopEffects, LogiLedStopEffectsOnKey
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedPulseLightingForKey(ELogiLedKeys Key, FLinearColor StartColor, FLinearColor EndColor, FTimespan Duration, bool Infinite);
 
 	/**
+	 * Play a pulsing effect on the specified keys.
+	 *
+	 * @param Keys The keys to pulse.
+	 * @param StartColor The pulse color to start with.
+	 * @param EndColor The pulse color to finish with.
+	 * @param Duration Duration of the effect.
+	 * @param Infinite Whether to loop the effect until LogiLedStopEffectsOnKey or LogiLedStopEffects is called.
+	 * @see LogiLedFlashSingleKey, LogiLedPulseLighting, LogiLedSetTargetDevice, LogiLedStopEffects, LogiLedStopEffectsOnKey
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedPulseLightingForKeys(const TArray<ELogiLedKeys>& Keys, FLinearColor StartColor, FLinearColor EndColor, FTimespan Duration, bool Infinite);
+
+	/**
 	 * Restore a previously saved lighting for the specified key.
 	 *
-	 * @return true on success, false otherwise.
-	 * @return true on success, false otherwise.
+	 * @param Key The key to restore.
 	 * @see LogiLedRestoreLighting, LogiLedSaveLightingForKey, LogiLedSetTargetDevice
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedRestoreLightingForKey(ELogiLedKeys Key);
 
 	/**
+	 * Restore a previously saved lighting for the specified keys.
+	 *
+	 * @param Keys The keys to restore.
+	 * @see LogiLedRestoreLighting, LogiLedSaveLightingForKey, LogiLedSetTargetDevice
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedRestoreLightingForKeys(const TArray<ELogiLedKeys>& Keys);
+
+	/**
 	 * Save the current lighting for the specified key so that it can be restored.
 	 *
-	 * @return true on success, false otherwise.
-	 * @return true on success, false otherwise.
+	 * @param Key The key to restore.
 	 * @see LogiLedRestoreLightingForKey, LogiLedSaveLighting, LogiLedSetTargetDevice
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedSaveLightingForKey(ELogiLedKeys Key);
 
 	/**
+	 * Save the current lighting for the specified keys so that it can be restored.
+	 *
+	 * @param Keys The keys to restore.
+	 * @see LogiLedRestoreLightingForKey, LogiLedSaveLighting, LogiLedSetTargetDevice
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedSaveLightingForKeys(const TArray<ELogiLedKeys>& Keys);
+
+	/**
 	 * Play a color curve on the specified key.
 	 *
 	 * @param Key The key to play the color curve on.
 	 * @param ColorCurve The color curve to play.
-	 * @return true on success, false otherwise.
 	 * @see LogiledAnimateLighting, LogiLedSetTargetDevice
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedSetLightingCurveForKey(ELogiLedKeys Key, UCurveLinearColor* ColorCurve);
 
 	/**
+	 * Play a color curve on the specified keys.
+	 *
+	 * @param Keys The keys to play the color curve on.
+	 * @param ColorCurve The color curve to play.
+	 * @see LogiledAnimateLighting, LogiLedSetTargetDevice
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedSetLightingCurveForKeys(const TArray<ELogiLedKeys>& Keys, UCurveLinearColor* ColorCurve);
+
+	/**
 	 * Set the lighting on the specified key.
 	 *
 	 * @param Key The key to set the lighting on.
 	 * @param Color The lighting color to set.
-	 *
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedSetLightingForKey(ELogiLedKeys Key, FLinearColor Color);
+
+	/**
+	 * Set the lighting on the specified keys.
+	 *
+	 * @param Keys The keys to set the lighting on.
+	 * @param Color The lighting color to set.
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedSetLightingForKeys(const TArray<ELogiLedKeys>& Keys, FLinearColor Color);
 
 	/**
 	 * Set the lighting of keys on the target device based on pixels in a texture.
@@ -404,7 +457,6 @@ public:
 	 * keys on the target device.
 	 *
 	 * @param Texture The texture containing the lighting color values.
-	 * @return true on success, false otherwise.
 	 * @see LogiLedExcludeKeysFromTexture
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
@@ -418,6 +470,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
 	static void LogiLedStopEffectForKey(ELogiLedKeys Key);
+
+	/**
+	 * Stop any active flashing, pulsing, or curve effect on the specified keys.
+	 *
+	 * @param Keys The keys to stop the effect on.
+	 * @see LogiLedFlashSingleKey, LogiLedPulseSingleKey, LogiLedSetTargetDevice, LogiLedStopEffects
+	 */
+	UFUNCTION(BlueprintCallable, Category="LogiLed|PerKey")
+	static void LogiLedStopEffectForKeys(const TArray<ELogiLedKeys>& Keys);
 
 private:
 
