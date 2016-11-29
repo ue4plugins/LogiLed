@@ -1,7 +1,9 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
-#include "LogiLedPCH.h"
 #include "LogiLedBlueprintLibrary.h"
+
+#include "Classes/Curves/CurveLinearColor.h"
+#include "Classes/Engine/Texture.h"
 
 
 FLogiLedManager ULogiLedBlueprintLibrary::Manager;

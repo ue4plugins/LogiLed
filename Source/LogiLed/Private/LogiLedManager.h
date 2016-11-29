@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "LogiLedPrivate.h"
 #include "Tickable.h"
 
 

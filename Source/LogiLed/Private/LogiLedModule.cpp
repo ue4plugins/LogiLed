@@ -1,6 +1,6 @@
 // Copyright 2015 Headcrash Industries LLC. All Rights Reserved.
 
-#include "LogiLedPCH.h"
+#include "LogiLedPrivate.h"
 
 
 DEFINE_LOG_CATEGORY(LogLogiLed);

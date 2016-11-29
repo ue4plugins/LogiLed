@@ -1,7 +1,8 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
-#include "LogiLedPCH.h"
 #include "LogiLedManager.h"
+
+#include "Classes/Curves/CurveLinearColor.h"
 
 
 /* FLogiLedManager structors
