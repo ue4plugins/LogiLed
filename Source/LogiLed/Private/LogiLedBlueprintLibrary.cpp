@@ -200,6 +200,8 @@ void ULogiLedBlueprintLibrary::LogiledSetLightingCurve(UCurveLinearColor* ColorC
 
 void ULogiLedBlueprintLibrary::LogiLedStopEffects()
 {
+	Manager.StopAnimations();
+
 	if (!::LogiLedStopEffects())
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects"));
@@ -242,6 +244,15 @@ void ULogiLedBlueprintLibrary::LogiLedFlashLightingForKey(ELogiLedKeys Key, FLin
 }
 
 
+void ULogiLedBlueprintLibrary::LogiLedFlashLightingForKeys(const TArray<ELogiLedKeys> Keys, FLinearColor Color, FTimespan Duration, FTimespan Interval)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedFlashLightingForKey(Key, Color, Duration, Interval);
+	}
+}
+
+
 void ULogiLedBlueprintLibrary::LogiLedPulseLightingForKey(ELogiLedKeys Key, FLinearColor StartColor, FLinearColor EndColor, FTimespan Duration, bool Infinite)
 {
 	const FLinearColor StartPercentage = StartColor.GetClamped() * 100.0f;
@@ -260,11 +271,29 @@ void ULogiLedBlueprintLibrary::LogiLedPulseLightingForKey(ELogiLedKeys Key, FLin
 }
 
 
+void ULogiLedBlueprintLibrary::LogiLedPulseLightingForKeys(const TArray<ELogiLedKeys>& Keys, FLinearColor StartColor, FLinearColor EndColor, FTimespan Duration, bool Infinite)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedPulseLightingForKey(Key, StartColor, EndColor, Duration, Infinite);
+	}
+}
+
+
 void ULogiLedBlueprintLibrary::LogiLedRestoreLightingForKey(ELogiLedKeys Key)
 {
 	if (!::LogiLedRestoreLightingForKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to restore lighting for key %s"), *LogiLedKeyToString(Key));
+	}
+}
+
+
+void ULogiLedBlueprintLibrary::LogiLedRestoreLightingForKeys(const TArray<ELogiLedKeys>& Keys)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedRestoreLightingForKey(Key);
 	}
 }
 
@@ -278,9 +307,27 @@ void ULogiLedBlueprintLibrary::LogiLedSaveLightingForKey(ELogiLedKeys Key)
 }
 
 
+void ULogiLedBlueprintLibrary::LogiLedSaveLightingForKeys(const TArray<ELogiLedKeys>& Keys)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedSaveLightingForKey(Key);
+	}
+}
+
+
 void ULogiLedBlueprintLibrary::LogiLedSetLightingCurveForKey(ELogiLedKeys Key, UCurveLinearColor* ColorCurve)
 {
 	Manager.PlayAnimation((LogiLed::KeyName)LogiLedKeyName[(int)Key], ColorCurve);
+}
+
+
+void ULogiLedBlueprintLibrary::LogiLedSetLightingCurveForKeys(const TArray<ELogiLedKeys>& Keys, UCurveLinearColor* ColorCurve)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedSetLightingCurveForKey(Key, ColorCurve);
+	}
 }
 
 
@@ -291,6 +338,15 @@ void ULogiLedBlueprintLibrary::LogiLedSetLightingForKey(ELogiLedKeys Key, FLinea
 	if (!::LogiLedSetLightingForKeyWithKeyName((LogiLed::KeyName)LogiLedKeyName[(int)Key], Percentage.R, Percentage.G, Percentage.B))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to set lighting to %s for key %s"), *Color.ToString(), *LogiLedKeyToString(Key));
+	}
+}
+
+
+void ULogiLedBlueprintLibrary::LogiLedSetLightingForKeys(const TArray<ELogiLedKeys>& Keys, FLinearColor Color)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedSetLightingForKey(Key, Color);
 	}
 }
 
@@ -316,8 +372,20 @@ void ULogiLedBlueprintLibrary::LogiLedSetLightingFromTexture(UTexture* Texture)
 
 void ULogiLedBlueprintLibrary::LogiLedStopEffectForKey(ELogiLedKeys Key)
 {
-	if (!::LogiLedStopEffectsOnKey((LogiLed::KeyName)LogiLedKeyName[(int)Key]))
+	auto KeyName = (LogiLed::KeyName)LogiLedKeyName[(int)Key];
+	Manager.StopAnimations(KeyName);
+
+	if (!::LogiLedStopEffectsOnKey(KeyName))
 	{
 		UE_LOG(LogLogiLed, Verbose, TEXT("Failed to stop effects for key %s"), *LogiLedKeyToString(Key));
+	}
+}
+
+
+void ULogiLedBlueprintLibrary::LogiLedStopEffectForKeys(const TArray<ELogiLedKeys>& Keys)
+{
+	for (const auto& Key : Keys)
+	{
+		LogiLedStopEffectForKey(Key);
 	}
 }
