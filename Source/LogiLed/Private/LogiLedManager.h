@@ -3,7 +3,10 @@
 #pragma once
 
 #include "LogiLedPrivate.h"
+
+#include "Containers/Map.h"
 #include "Tickable.h"
+#include "UObject/WeakObjectPtr.h"
 
 
 class UCurveLinearColor;

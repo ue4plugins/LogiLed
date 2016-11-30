@@ -4,6 +4,9 @@
 
 #include "Classes/Curves/CurveLinearColor.h"
 #include "Classes/Engine/Texture.h"
+#include "TextureResource.h"
+#include "UObject/Package.h"
+#include "UObject/UObjectGlobals.h"
 
 
 FLogiLedManager ULogiLedBlueprintLibrary::Manager;

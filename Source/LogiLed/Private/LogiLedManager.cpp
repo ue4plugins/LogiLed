@@ -4,6 +4,10 @@
 
 #include "Classes/Curves/CurveLinearColor.h"
 
+#if WITH_EDITOR
+	#include "Editor.h"
+#endif
+
 
 /* FLogiLedManager structors
  *****************************************************************************/
