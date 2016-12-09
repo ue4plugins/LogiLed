@@ -20,7 +20,7 @@
 			"Name" : "LogiLed",
 			"Type" : "RuntimeNoCommandlet",
 			"LoadingPhase" : "PreLoadingScreen",
-			"WhitelistPlatforms" : [ "Linux", "Mac", "Win32", "Win64" ]
+			"WhitelistPlatforms" : [ "Win32", "Win64" ]
 		}
 	]
 }
