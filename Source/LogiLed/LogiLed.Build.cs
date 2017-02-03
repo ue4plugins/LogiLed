@@ -8,7 +8,7 @@ namespace UnrealBuildTool.Rules
 
 	public class LogiLed : ModuleRules
 	{
-		public LogiLed(TargetInfo Target)
+		public LogiLed(ReadOnlyTargetRules Target) : base(Target)
 		{
 			PrivateDependencyModuleNames.AddRange(
 				new string[] {
