@@ -7,19 +7,20 @@ Unreal Engine 4 plug-in for Logitech LED illumination keyboards.
 
 ## About
 
-TODO
+This plug-in implements Blueprint functions for controlling the LED lights
+in supported Logitech keyboards and mice.
+
+Make sure to pull the Tag that matches your Unreal Engine version. If you sync
+to Master the code may not compile, because it may depend on Engine changes that
+are not yet available in the UE4 Master branch.
+
 
 ## Supported Platforms
 
-This plug-in was last built against **Unreal Engine 4.14** with *Logitech LED
-SDK 8.87* and tested on the following platforms:
+This plug-in was last built against **Unreal Engine 4.15** with
+*Logitech LED SDK 8.87* and tested on the following platforms:
 
 - Windows
-
-
-## Prerequisites
-
-TODO
 
 
 ## Dependencies
