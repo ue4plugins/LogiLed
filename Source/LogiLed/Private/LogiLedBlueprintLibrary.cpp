@@ -47,7 +47,7 @@ FString ULogiLedBlueprintLibrary::LogiLedKeyToString(ELogiLedKeys Key)
 	static const UEnum* Enum = FindObject<UEnum>(ANY_PACKAGE, TEXT("ELogiLedKeys"));
 	check(Enum);
 
-	return Enum->GetEnumName((int32)Key);
+	return Enum->GetNameStringByValue((int64)Key);
 }
 
 
