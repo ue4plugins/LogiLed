@@ -5,6 +5,8 @@
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
 
+#include "LogitechLEDLib.h"
+
 
 DEFINE_LOG_CATEGORY(LogLogiLed);
 

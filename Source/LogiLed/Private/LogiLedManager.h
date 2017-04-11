@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "LogiLedPrivate.h"
-
 #include "Containers/Map.h"
+#include "Templates/SharedPointer.h"
 #include "Tickable.h"
 #include "UObject/WeakObjectPtr.h"
 
+#include "LogitechLEDLib.h"
 
 class UCurveLinearColor;
 

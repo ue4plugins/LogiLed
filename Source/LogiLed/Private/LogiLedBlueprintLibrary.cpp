@@ -1,12 +1,15 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "LogiLedBlueprintLibrary.h"
+#include "LogiLedPrivate.h"
 
 #include "Classes/Curves/CurveLinearColor.h"
 #include "Classes/Engine/Texture.h"
 #include "TextureResource.h"
 #include "UObject/Package.h"
 #include "UObject/UObjectGlobals.h"
+
+#include "LogitechLEDLib.h"
 
 
 FLogiLedManager ULogiLedBlueprintLibrary::Manager;

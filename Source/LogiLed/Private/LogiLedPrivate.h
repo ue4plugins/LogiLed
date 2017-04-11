@@ -4,10 +4,7 @@
 
 #define LOGILED_SUPPORTED_PLATFORM (PLATFORM_WINDOWS)
 
-
-#include "Runtime/Core/Public/CoreMinimal.h"
-
-#include "LogitechLEDLib.h"
+#include "Logging/LogMacros.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogLogiLed, Log, All);
