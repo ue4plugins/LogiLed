@@ -10,27 +10,25 @@ namespace UnrealBuildTool.Rules
 	{
 		public LogiLed(ReadOnlyTargetRules Target) : base(Target)
 		{
-            PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+			PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-            PrivateDependencyModuleNames.AddRange(
+			PrivateDependencyModuleNames.AddRange(
 				new string[] {
 					"Core",
 					"CoreUObject",
 					"Engine",
-				}
-			);
+				});
 
 			PrivateIncludePaths.AddRange(
 				new string[] {
 					"LogiLed/Private",
 					"LogiLed/Private/Assets",
-				}
-			);
+				});
 
-            if (UEBuildConfiguration.bBuildEditor)
-            {
-                PrivateDependencyModuleNames.Add("UnrealEd");
-            }
+			if (Target.bBuildEditor)
+			{
+				PrivateDependencyModuleNames.Add("UnrealEd");
+			}
 
 			// add Logitech SDK libraries
 			string LogiDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "..", "..", "ThirdParty"));
